@@ -7,13 +7,21 @@ A unified interface for sending react-email emails across multiple email service
 - Full support for `react-email`
 - Support for multiple email providers:
   - MailChannels (including support for DKIM configuration)
-  - Azure Communication Services
+  - Azure Communication Services (`@azure/communication-email` is a required peerDependency)
 - Development mode logging
 
 ## Installation
 
 ```bash
 npm install react-email-sender-adapters
+```
+
+### Azure Communication Services
+
+If you want to use this package in combination with Azure Communication Services, you additionally have to install the peer dependency `@azure/communication-email`:
+
+```bash
+npm install @azure/communication-email
 ```
 
 ## Quick Start
