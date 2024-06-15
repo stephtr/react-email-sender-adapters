@@ -41,7 +41,7 @@ export async function sendEmail(email: React.ReactElement,
             if (typeof a.content === 'string') {
                 contentInBase64 = a.content;
             } else if (a.content instanceof ArrayBuffer) {
-                contentInBase64 = btoa(new TextDecoder().decode(a.content));
+                contentInBase64 = btoa(new TextDecoder('ascii').decode(a.content));
             } else if (Buffer.isBuffer(a.content)) {
                 contentInBase64 = a.content.toString('base64');
             } else {
