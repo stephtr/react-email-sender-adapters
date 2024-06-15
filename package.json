@@ -1,6 +1,6 @@
 {
 	"name": "react-email-sender-adapters",
-	"version": "0.1.4",
+	"version": "0.1.5",
 	"description": "A unified interface for sending react-email emails across multiple email services.",
 	"main": "dist/index.js",
 	"type": "module",

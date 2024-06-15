@@ -24,7 +24,7 @@ export async function sendEmail(email: React.ReactElement,
 
     const poller = await client.beginSend({
         senderAddress: from.email,
-        headers: from.name ? { From: `${from.name} <${from.email}>` } : undefined,
+        headers: from.name ? { From: `"${from.name}" <${from.email}>` } : undefined,
         content: {
             subject: options.subject,
             plainText: text,
