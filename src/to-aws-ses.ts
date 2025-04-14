@@ -1,9 +1,7 @@
-import { SESClient, SendRawEmailCommand } from '@aws-sdk/client-ses';
+import { AwsClient } from 'aws4fetch';
 import { createMimeMessage, Mailbox } from 'mimetext/browser';
 import { EmailOptions } from './index.js';
 import { encodeAttachmentToBase64, parseMail, quotedPrintableEncode } from './tools.js';
-
-
 
 export async function sendEmail(email: React.ReactElement,
     options: EmailOptions<{ region?: string; accessKeyId?: string; secretAccessKey?: string }>) {
@@ -19,13 +17,13 @@ export async function sendEmail(email: React.ReactElement,
     if (!accessKeyId) throw new Error('No access key ID provided for AWS SES. You can set the environment variable `AWS_SES_ACCESS_KEY_ID`.');
     if (!secretAccessKey) throw new Error('No secret access key provided for AWS SES. You can set the environment variable `AWS_SES_SECRET_ACCESS_KEY`.');
 
-    const client = new SESClient({ region, credentials: { accessKeyId, secretAccessKey } });
+    const aws = new AwsClient({ region, accessKeyId, secretAccessKey });
     
     const msg = createMimeMessage();
     msg.setSender({ addr: from.email, name: from.name });
     msg.setRecipients(to.map(({ email, name }) => ({ addr: email, name })));
     if (cc) msg.setCc(cc.map(({ email, name }) => ({ addr: email, name })));
-    if (bcc) msg.setCc(bcc.map(({ email, name }) => ({ addr: email, name })));
+    if (bcc) msg.setBcc(bcc.map(({ email, name }) => ({ addr: email, name })));
     if (reply_to) msg.setHeader('Reply-To', new Mailbox({ addr: reply_to.email, name: reply_to.name }));
     msg.setSubject(options.subject);
     msg.addMessage({ contentType: 'text/plain', data: quotedPrintableEncode(text), encoding: 'quoted-printable' });
@@ -38,7 +36,18 @@ export async function sendEmail(email: React.ReactElement,
         });
     }
 
-    const mailCommand = new SendRawEmailCommand({ RawMessage: { Data: new TextEncoder().encode(msg.asRaw()) } });
+    const result = await aws.fetch(`https://email.${region}.amazonaws.com`, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/x-www-form-urlencoded',
+        },
+        body: new URLSearchParams({
+            Action: 'SendRawEmail',
+            "RawMessage.Data": btoa(msg.asRaw()),
+        }).toString(),
+    });
 
-    await client.send(mailCommand);
+    if (result.status !== 200) {
+        throw new Error(`Failed to send email: ${result.status} ${await result.text()}`);
+    }
 }
