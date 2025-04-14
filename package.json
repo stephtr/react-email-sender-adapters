@@ -1,6 +1,6 @@
 {
 	"name": "react-email-sender-adapters",
-	"version": "0.2.0",
+	"version": "0.2.1",
 	"description": "A unified interface for sending react-email emails across multiple email services.",
 	"main": "dist/index.js",
 	"type": "module",
@@ -43,14 +43,20 @@
 		"@react-email/render": "^1"
 	},
 	"peerDependencies": {
-		"@react-email/render": "^1",
 		"@azure/communication-email": "^1",
+		"@azure/core-rest-pipeline": "^1",
+		"@react-email/render": "^1",
 		"react": "^18 || ^19"
 	},
 	"devDependencies": {
+		"@aws-sdk/client-ses": "^3.787.0",
 		"@azure/communication-email": "^1.0.0",
+		"@azure/core-rest-pipeline": "^1.0.0",
 		"@types/node": "^20.12.7",
 		"@types/react": "^18.2.78",
 		"typescript": "^5.4.5"
+	},
+	"dependencies": {
+		"mimetext": "^3.0.27"
 	}
 }

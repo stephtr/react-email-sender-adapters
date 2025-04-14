@@ -1,11 +1,12 @@
 # react-email-sender-adapters
 
-A unified interface for sending react-email emails across multiple email services. This package supports sending emails through console.log (development environment), MailChannels, and Azure Communication Services.
+A unified interface for sending react-email emails across multiple email services. This package supports sending emails through console.log (development environment), AWS SES, MailChannels, and Azure Communication Services.
 
 ## Features
 
 - Full support for `react-email`
 - Support for multiple email providers:
+  - AWS SES (`@aws-sdk/client-ses` is a required peerDependency)
   - MailChannels (including support for DKIM configuration)
   - Azure Communication Services (`@azure/communication-email` is a required peerDependency)
 - Development mode logging
@@ -14,6 +15,14 @@ A unified interface for sending react-email emails across multiple email service
 
 ```bash
 npm install react-email-sender-adapters
+```
+
+### AWS SES
+
+If you want to use this package in combination with AWS SES, you additionally have to install the peer dependency `@aws-sdk/client-ses`:
+
+```bash
+npm install @aws-sdk/client-ses
 ```
 
 ### Azure Communication Services
@@ -76,6 +85,18 @@ type Attachment = {
   contentType: string;
   filename: string;
   content: Buffer | ArrayBuffer | string; // base64 encoded string
+};
+```
+
+### AWS SES
+
+For sending mails with AWS SES, one needs to configure the following settings:
+
+```ts
+type AWSEmailOptions = EmailOptions & {
+  region?: string; // alternatively, set the env variable `AWS_SES_REGION`
+  accessKeyId?: string; // alternatively, set `AWS_SES_ACCESS_KEY_ID`
+  secretAccessKey?: string; // alternatively, set `AWS_SES_SECRET_ACCESS_KEY`
 };
 ```
 
