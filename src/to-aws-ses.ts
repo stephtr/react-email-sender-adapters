@@ -1,19 +1,9 @@
 import { SESClient, SendRawEmailCommand } from '@aws-sdk/client-ses';
 import { createMimeMessage, Mailbox } from 'mimetext/browser';
 import { EmailOptions } from './index.js';
-import { parseMail } from './tools.js';
+import { encodeAttachmentToBase64, parseMail, quotedPrintableEncode } from './tools.js';
 
-function encodeAttachmentToBase64(content: Buffer | ArrayBuffer | string): string {
-    if (typeof content === 'string') {
-        return content;
-    } else if (content instanceof ArrayBuffer) {
-        return btoa(new TextDecoder('ascii').decode(content));
-    } else if (Buffer.isBuffer(content)) {
-        return content.toString('base64');
-    } else {
-        throw new Error('Unsupported attachment content format (supported: string, Buffer, ArrayBuffer)');
-    }
-}
+
 
 export async function sendEmail(email: React.ReactElement,
     options: EmailOptions<{ region?: string; accessKeyId?: string; secretAccessKey?: string }>) {
@@ -38,8 +28,8 @@ export async function sendEmail(email: React.ReactElement,
     if (bcc) msg.setCc(bcc.map(({ email, name }) => ({ addr: email, name })));
     if (reply_to) msg.setHeader('Reply-To', new Mailbox({ addr: reply_to.email, name: reply_to.name }));
     msg.setSubject(options.subject);
-    msg.addMessage({ contentType: 'text/plain', data: text });
-    msg.addMessage({ contentType: 'text/html', data: html });
+    msg.addMessage({ contentType: 'text/plain', data: quotedPrintableEncode(text), encoding: 'quoted-printable' });
+    msg.addMessage({ contentType: 'text/html', data: quotedPrintableEncode(html), encoding: 'quoted-printable' });
     for (const attachment of options.attachments || []) {
         msg.addAttachment({
             contentType: attachment.contentType,

@@ -1,6 +1,6 @@
 import { EmailClient } from '@azure/communication-email';
 import { EmailOptions } from './index.js';
-import { parseMail } from './tools.js';
+import { encodeAttachmentToBase64, parseMail } from './tools.js';
 
 export type DKIMOptions = {
     domain: string;
@@ -36,24 +36,11 @@ export async function sendEmail(email: React.ReactElement,
             bcc: bcc?.map(({ email, name }) => ({ address: email, displayName: name })),
         },
         replyTo: reply_to ? [{ address: reply_to.email, displayName: reply_to.name }] : undefined,
-        attachments: options.attachments?.map(a => {
-            let contentInBase64 = '';
-            if (typeof a.content === 'string') {
-                contentInBase64 = a.content;
-            } else if (a.content instanceof ArrayBuffer) {
-                contentInBase64 = btoa(new TextDecoder('ascii').decode(a.content));
-            } else if (Buffer.isBuffer(a.content)) {
-                contentInBase64 = a.content.toString('base64');
-            } else {
-                throw new Error('Unsupported attachment content format (supported: string, Buffer, ArrayBuffer)');
-            }
-
-            return {
-                name: a.filename,
-                contentType: a.contentType,
-                contentInBase64,
-            };
-        }),
+        attachments: options.attachments?.map(a => ({
+            name: a.filename,
+            contentType: a.contentType,
+            contentInBase64: encodeAttachmentToBase64(a.content),
+        })),
     });
     const response = await poller.pollUntilDone();
     if (response.error) {
