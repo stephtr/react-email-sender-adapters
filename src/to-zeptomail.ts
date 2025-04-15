@@ -1,4 +1,3 @@
-// @ts-ignore
 import { EmailOptions } from './index.js';
 import { encodeAttachmentToBase64, parseMail } from './tools.js';
 
