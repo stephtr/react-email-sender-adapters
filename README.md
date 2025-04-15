@@ -17,14 +17,6 @@ A unified interface for sending react-email emails across multiple email service
 npm install react-email-sender-adapters
 ```
 
-### AWS SES
-
-If you want to use this package in combination with AWS SES, you additionally have to install the peer dependency `@aws-sdk/client-ses`:
-
-```bash
-npm install @aws-sdk/client-ses
-```
-
 ### Azure Communication Services
 
 If you want to use this package in combination with Azure Communication Services, you additionally have to install the peer dependency `@azure/communication-email`:
@@ -121,6 +113,17 @@ To communicate with Azure Communication Services, a connection string is require
 ```ts
 type AzureEmailOptions = EmailOptions & {
   connectionString?: string;
+};
+```
+
+### Zeptomail
+
+For Zeptomail, the `url` and `token` parameters are needed. You can also supply them via the environment variables `ZEPTOMAIL_URL` and `ZEPTOMAIL_TOKEN`.
+
+```ts
+type ZeptomailEmailOptions = EmailOptions & {
+  url?: string;
+  token?: string;
 };
 ```
 
