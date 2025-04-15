@@ -17,7 +17,7 @@ export async function sendEmail(email: React.ReactElement,
 
     const client = new SendMailClient({ url, token });
 
-    await client.sendEmail({
+    await client.sendMail({
         from: { address: from.email, name: from.name },
         to: to.map(({ email, name }) => ({ "email_address": { address: email, name } })),
         cc: cc?.map(({ email, name }) => ({ "email_address": { address: email, name } })),
