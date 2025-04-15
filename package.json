@@ -1,6 +1,6 @@
 {
 	"name": "react-email-sender-adapters",
-	"version": "0.2.6",
+	"version": "0.2.7",
 	"description": "A unified interface for sending react-email emails across multiple email services.",
 	"main": "dist/index.js",
 	"type": "module",
@@ -9,7 +9,8 @@
 		"./to-console": "./dist/to-console.js",
 		"./to-aws-ses": "./dist/to-aws-ses.js",
 		"./to-mailchannels": "./dist/to-mailchannels.js",
-		"./to-azure-communication": "./dist/to-azure-communication.js"
+		"./to-azure-communication": "./dist/to-azure-communication.js",
+		"./to-zeptomail": "./dist/to-zeptomail.js"
 	},
 	"types": "dist/index.d.ts",
 	"typesVersions": {
@@ -25,6 +26,9 @@
 			],
 			"to-azure-communication": [
 				"dist/to-azure-communication.d.ts"
+			],
+			"to-zeptomail": [
+				"dist/to-zeptomail.d.ts"
 			]
 		}
 	},
