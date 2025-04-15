@@ -14,7 +14,9 @@ export async function sendEmail(email: React.ReactElement,
     if (!url) throw new Error('No url provided for Zeptomail. You can also set the environment variable `ZEPTOMAIL_URL`.');
     if (!token) throw new Error('No token provided for Zeptomail. You can also set the environment variable `ZEPTOMAIL_TOKEN`.');
 
-    const result = await fetch(`https://${url}/v1.1/email`, {
+    // Clean the URL by removing protocol prefix and trailing slashes
+    const cleanUrl = url.replace(/^https?:\/\//, '').replace(/\/+$/, '');
+    const result = await fetch(`https://${cleanUrl}/v1.1/email`, {
         method: 'POST',
         headers: {
             'Accept': 'application/json',
