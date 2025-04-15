@@ -1,6 +1,6 @@
 {
 	"name": "react-email-sender-adapters",
-	"version": "0.2.8",
+	"version": "0.2.9",
 	"description": "A unified interface for sending react-email emails across multiple email services.",
 	"main": "dist/index.js",
 	"type": "module",
@@ -65,7 +65,6 @@
 	},
 	"dependencies": {
 		"aws4fetch": "1.0.20",
-		"mimetext": "^3.0.27",
-		"zeptomail": "^6.2.0"
+		"mimetext": "^3.0.27"
 	}
 }
